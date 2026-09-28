@@ -38,15 +38,15 @@ public enum ArtPreset: String, CaseIterable, Identifiable, Codable, Sendable {
     public var settings: RenderSettings? {
         switch self {
         case .balanced:
-            RenderSettings(shapeMode: .triangle, shapeCount: 180, alpha: 128, inputSize: 256, outputSize: 2048, format: .png)
+            RenderSettings(shapeMode: .triangle, shapeCount: 900, alpha: 128, inputSize: 512, outputSize: 2048, format: .png)
         case .portrait:
-            RenderSettings(shapeMode: .triangle, shapeCount: 240, alpha: 112, inputSize: 256, outputSize: 2048, format: .png)
+            RenderSettings(shapeMode: .triangle, shapeCount: 1400, alpha: 112, inputSize: 512, outputSize: 2048, format: .png)
         case .landscape:
-            RenderSettings(shapeMode: .polygon, shapeCount: 220, alpha: 144, inputSize: 256, outputSize: 2048, format: .png)
+            RenderSettings(shapeMode: .polygon, shapeCount: 1100, alpha: 144, inputSize: 512, outputSize: 2048, format: .png)
         case .architecture:
-            RenderSettings(shapeMode: .rotatedRectangle, shapeCount: 220, alpha: 150, inputSize: 256, outputSize: 2048, format: .png)
+            RenderSettings(shapeMode: .rotatedRectangle, shapeCount: 1100, alpha: 150, inputSize: 512, outputSize: 2048, format: .png)
         case .abstract:
-            RenderSettings(shapeMode: .combo, shapeCount: 150, alpha: 104, inputSize: 256, outputSize: 2048, format: .png)
+            RenderSettings(shapeMode: .combo, shapeCount: 900, alpha: 104, inputSize: 512, outputSize: 2048, format: .png)
         case .minimal:
             RenderSettings(shapeMode: .circle, shapeCount: 80, alpha: 160, inputSize: 192, outputSize: 1536, format: .png)
         case .custom:

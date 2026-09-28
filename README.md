@@ -87,15 +87,15 @@ PrismArt uses two render levels:
 Parameter change
       │
       └── Quick Preview
-          ≤ 72 shapes
-          ≤ 128 px analysis resolution
-          ≤ 1024 px preview output
+          ≤ 180 shapes
+          ≤ 256 px analysis resolution
+          ≤ 1536 px preview output
 
 Generate Full Quality
       │
       └── Your selected settings
-          up to 800 shapes in the UI
-          up to 512 px analysis resolution
+          up to 5,000 shapes in the UI
+          up to 1024 px analysis resolution
           up to 8192 px output
 ```
 

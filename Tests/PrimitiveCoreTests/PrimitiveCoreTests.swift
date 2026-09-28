@@ -69,9 +69,9 @@ final class PrimitiveCoreTests: XCTestCase {
 
         XCTAssertEqual(preview.shapeMode, .polygon)
         XCTAssertEqual(preview.alpha, 111)
-        XCTAssertEqual(preview.shapeCount, 72)
-        XCTAssertEqual(preview.inputSize, 128)
-        XCTAssertEqual(preview.outputSize, 1024)
+        XCTAssertEqual(preview.shapeCount, 120)
+        XCTAssertEqual(preview.inputSize, 256)
+        XCTAssertEqual(preview.outputSize, 1536)
         XCTAssertEqual(preview.format, .png)
     }
 

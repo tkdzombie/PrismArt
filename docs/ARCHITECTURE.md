@@ -41,9 +41,9 @@ A result may update UI state only while its token is still current.
 Settings changes are debounced before preview work begins. Preview settings preserve
 shape type and alpha but cap expensive parameters:
 
-- at most 72 shapes;
+- at most 180 shapes;
 - 128 px analysis size;
-- at most 1024 px output;
+- at most 1536 px output;
 - PNG only.
 
 Full-quality output is never replaced by a preview after a newer render has started.

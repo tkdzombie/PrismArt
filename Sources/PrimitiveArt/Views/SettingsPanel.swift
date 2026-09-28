@@ -81,7 +81,7 @@ struct SettingsPanel: View {
                         get: { Double(model.settings.shapeCount) },
                         set: { model.settings.shapeCount = Int($0.rounded()) }
                     ),
-                    range: 25...800,
+                    range: 25...5_000,
                     step: 25,
                     valueText: "\(model.settings.shapeCount)"
                 )
@@ -108,6 +108,7 @@ struct SettingsPanel: View {
                     Text("128 px · Fast").tag(128)
                     Text("256 px · Balanced").tag(256)
                     Text("512 px · Detailed").tag(512)
+                    Text("1024 px · Very detailed").tag(1024)
                 }
 
                 Picker("Output", selection: $model.settings.outputSize) {
@@ -118,7 +119,7 @@ struct SettingsPanel: View {
                     Text("8192 px").tag(8192)
                 }
 
-                Label("Quick preview uses up to 72 shapes at 128 px analysis size.", systemImage: "bolt")
+                Label("Quick preview uses up to 180 shapes at 256 px analysis size.", systemImage: "bolt")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -2,7 +2,7 @@ import Foundation
 
 public struct RenderSettings: Equatable, Codable, Sendable {
     public var shapeMode: ShapeMode = .triangle
-    public var shapeCount: Int = 180
+    public var shapeCount: Int = 1000
     public var alpha: Int = 128
     public var inputSize: Int = 256
     public var outputSize: Int = 2048
@@ -10,7 +10,7 @@ public struct RenderSettings: Equatable, Codable, Sendable {
 
     public init(
         shapeMode: ShapeMode = .triangle,
-        shapeCount: Int = 180,
+        shapeCount: Int = 1000,
         alpha: Int = 128,
         inputSize: Int = 256,
         outputSize: Int = 2048,
@@ -36,9 +36,9 @@ public struct RenderSettings: Equatable, Codable, Sendable {
     /// artistic choices of the final settings.
     public func quickPreviewSettings() -> RenderSettings {
         var preview = self
-        preview.shapeCount = min(72, max(32, shapeCount / 3))
-        preview.inputSize = min(inputSize, 128)
-        preview.outputSize = min(outputSize, 1_024)
+        preview.shapeCount = min(180, max(64, shapeCount / 5))
+        preview.inputSize = min(inputSize, 256)
+        preview.outputSize = min(outputSize, 1_536)
         preview.format = .png
         return preview
     }
