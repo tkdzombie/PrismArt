@@ -75,7 +75,7 @@ jobs:
           lipo -info "dist/PrismArt.app/Contents/Resources/bin/primitive"
 
       - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PrismArt-${{ steps.release.outputs.version }}-macOS
           path: |
@@ -137,7 +137,7 @@ jobs:
           if ($expected -ne $actual) { throw 'Windows ZIP checksum mismatch.' }
           if (-not (Test-Path 'dist/windows/PrismArt.exe')) { throw 'PrismArt.exe missing.' }
           if (-not (Test-Path 'dist/windows/primitive.exe')) { throw 'primitive.exe missing.' }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: PrismArt-${{ needs.release.outputs.version }}-Windows-x64
           path: |
