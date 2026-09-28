@@ -52,6 +52,13 @@ final class PrimitiveCoreTests: XCTestCase {
         }
     }
 
+    func testShapeCountLimitIsTwentyThousand() throws {
+        XCTAssertEqual(try RenderSettings(shapeCount: 20_000).validated().shapeCount, 20_000)
+        XCTAssertThrowsError(try RenderSettings(shapeCount: 20_001).validated()) { error in
+            XCTAssertEqual(error as? RenderValidationError, .invalidShapeCount)
+        }
+    }
+
     func testAllUpstreamShapeModesRemainStable() {
         XCTAssertEqual(ShapeMode.allCases.map(\.rawValue), Array(0...8))
     }

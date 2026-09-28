@@ -81,7 +81,7 @@ struct SettingsPanel: View {
                         get: { Double(model.settings.shapeCount) },
                         set: { model.settings.shapeCount = Int($0.rounded()) }
                     ),
-                    range: 25...5_000,
+                    range: 25...20_000,
                     step: 25,
                     valueText: "\(model.settings.shapeCount)"
                 )

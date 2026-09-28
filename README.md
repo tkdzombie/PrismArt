@@ -94,7 +94,7 @@ Parameter change
 Generate Full Quality
       │
       └── Your selected settings
-          up to 5,000 shapes in the UI
+          up to 20,000 shapes in the UI
           up to 1024 px analysis resolution
           up to 8192 px output
 ```

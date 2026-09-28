@@ -25,7 +25,7 @@ public struct RenderSettings: Equatable, Codable, Sendable {
     }
 
     public func validated() throws -> RenderSettings {
-        guard (1...5_000).contains(shapeCount) else { throw RenderValidationError.invalidShapeCount }
+        guard (1...20_000).contains(shapeCount) else { throw RenderValidationError.invalidShapeCount }
         guard (0...255).contains(alpha) else { throw RenderValidationError.invalidAlpha }
         guard (32...2_048).contains(inputSize) else { throw RenderValidationError.invalidInputSize }
         guard (128...8_192).contains(outputSize) else { throw RenderValidationError.invalidOutputSize }
@@ -54,7 +54,7 @@ public enum RenderValidationError: LocalizedError, Equatable {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidShapeCount: "Shape count must be between 1 and 5000."
+        case .invalidShapeCount: "Shape count must be between 1 and 20000."
         case .invalidAlpha: "Alpha must be between 0 and 255."
         case .invalidInputSize: "Input size must be between 32 and 2048 pixels."
         case .invalidOutputSize: "Output size must be between 128 and 8192 pixels."
