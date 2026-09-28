@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a focused PrismArt improvement
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Problem or workflow
+      description: What are you trying to accomplish, and where does PrismArt get in the way?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful change.
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Project constraints
+      options:
+        - label: This can remain fully local/offline.
+        - label: This does not require a persistent background service.

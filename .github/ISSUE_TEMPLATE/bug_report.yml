@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible PrismArt problem
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: input
+    attributes:
+      label: PrismArt version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: macOS version
+      placeholder: macOS 27.x
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Mac architecture
+      options: [Apple Silicon, Intel]
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Include exact steps, expected behavior and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Render settings
+      description: Input format, preset/shape, shape count, analysis size, output size and format.
+      placeholder: HEIC → Triangle, 200 shapes, 256 analysis, 2048 output, PNG
+  - type: textarea
+    attributes:
+      label: Extra context
+      description: Screenshots, non-sensitive sample image properties, crash logs or GitHub Actions logs.

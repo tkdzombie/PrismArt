@@ -1,0 +1,104 @@
+name: Release DMG
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (for example: 1.0.1)'
+        required: true
+        default: '1.0.1'
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+
+      - name: Resolve release version
+        id: release
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ inputs.version }}"
+            VERSION="${VERSION#v}"
+            TAG="v${VERSION}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+            VERSION="${TAG#v}"
+          fi
+
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid version: $VERSION" >&2
+            exit 2
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Building PrismArt $TAG"
+
+      - name: Source checks
+        run: make check
+
+      - name: Build ad-hoc signed Universal DMG
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: scripts/package.sh
+
+      - name: Verify release artifacts
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          codesign --verify --deep --strict --verbose=2 "dist/PrismArt.app"
+          shasum -a 256 -c "dist/PrismArt-$VERSION.dmg.sha256"
+          hdiutil verify "dist/PrismArt-$VERSION.dmg"
+          lipo -info "dist/PrismArt.app/Contents/MacOS/PrismArt"
+          lipo -info "dist/PrismArt.app/Contents/Resources/bin/primitive"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PrismArt-${{ steps.release.outputs.version }}-macOS
+          path: |
+            dist/PrismArt-${{ steps.release.outputs.version }}.dmg
+            dist/PrismArt-${{ steps.release.outputs.version }}.dmg.sha256
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          cat > /tmp/release-notes.md <<'NOTES'
+          ## PrismArt for macOS
+
+          Universal macOS build for Apple Silicon and Intel. End users do not need Homebrew, Go, Xcode, or ImageMagick.
+
+          **Gatekeeper:** this build is ad-hoc signed because the project does not use a paid Apple Developer ID. macOS may block the first launch. After attempting to open PrismArt, use **System Settings → Privacy & Security → Open Anyway** only if you trust this repository and the downloaded checksum matches.
+          NOTES
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; uploading/replacing assets."
+            gh release upload "$TAG" \
+              "dist/PrismArt-$VERSION.dmg" \
+              "dist/PrismArt-$VERSION.dmg.sha256" \
+              --clobber
+          else
+            gh release create "$TAG" \
+              "dist/PrismArt-$VERSION.dmg" \
+              "dist/PrismArt-$VERSION.dmg.sha256" \
+              --target "$GITHUB_SHA" \
+              --title "PrismArt $TAG" \
+              --notes-file /tmp/release-notes.md
+          fi
