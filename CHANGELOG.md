@@ -4,6 +4,13 @@ All notable PrismArt changes are documented here.
 
 ## [1.0.1] - 2026-09-28
 
+### Fixed
+- Fixed Swift 6 continuation type inference in the macOS Primitive process runner.
+- Tightened process cancellation and output synchronization for modern Swift concurrency.
+- Silenced drag-and-drop API unused-return warnings.
+- Made released SHA-256 files portable by storing the DMG basename instead of a CI absolute path.
+
+### Added
 - Added one-click GitHub publisher bundle for zero-install local setup.
 - Added browser-based GitHub authentication and automated repository creation/upload.
 - Added automatic Release DMG workflow dispatch and DMG download.

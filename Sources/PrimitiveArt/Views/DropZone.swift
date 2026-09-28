@@ -52,7 +52,7 @@ struct DropZone: View {
             guard let provider = providers.first else { return false }
 
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadDataRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { data, _ in
+                _ = provider.loadDataRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { data, _ in
                     guard let data, let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
                     Task { @MainActor in model.setInput(url) }
                 }
@@ -60,7 +60,7 @@ struct DropZone: View {
             }
 
             if let contentType = provider.registeredContentTypes.first(where: { $0.conforms(to: .image) }) {
-                provider.loadDataRepresentation(for: contentType) { data, _ in
+                _ = provider.loadDataRepresentation(for: contentType) { data, _ in
                     guard let data else { return }
                     let fileExtension = contentType.preferredFilenameExtension ?? "img"
                     let displayName = provider.suggestedName ?? "Dropped Image"

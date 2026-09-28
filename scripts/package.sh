@@ -67,5 +67,9 @@ if [[ "$SIGNING_IDENTITY" != "-" ]]; then
   codesign --force --timestamp --sign "$SIGNING_IDENTITY" "$DMG"
 fi
 
-shasum -a 256 "$DMG" > "$DMG.sha256"
+DMG_NAME="$(basename "$DMG")"
+(
+  cd "$DIST"
+  shasum -a 256 "$DMG_NAME" > "$DMG_NAME.sha256"
+)
 printf '\nArtifacts:\n  %s\n  %s\n  %s\n' "$APP" "$DMG" "$DMG.sha256"
