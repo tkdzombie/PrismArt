@@ -1,4 +1,4 @@
-name: Release DMG
+name: Release macOS + Windows
 
 on:
   workflow_dispatch:
@@ -18,6 +18,9 @@ permissions:
 jobs:
   release:
     runs-on: macos-26
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
 
@@ -86,9 +89,9 @@ jobs:
           TAG: ${{ steps.release.outputs.tag }}
         run: |
           cat > /tmp/release-notes.md <<'NOTES'
-          ## PrismArt for macOS
+          ## PrismArt for macOS and Windows
 
-          Universal macOS build for Apple Silicon and Intel. End users do not need Homebrew, Go, Xcode, or ImageMagick.
+          The macOS DMG supports Apple Silicon and Intel. The Windows x64 ZIP includes a self-contained app and the Primitive engine. End users do not need Go, Xcode, or .NET installed.
 
           **Gatekeeper:** this build is ad-hoc signed because the project does not use a paid Apple Developer ID. macOS may block the first launch. After attempting to open PrismArt, use **System Settings → Privacy & Security → Open Anyway** only if you trust this repository and the downloaded checksum matches.
           NOTES
@@ -107,3 +110,43 @@ jobs:
               --title "PrismArt $TAG" \
               --notes-file /tmp/release-notes.md
           fi
+
+  windows:
+    needs: release
+    runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.release.outputs.version }}
+      TAG: ${{ needs.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build portable Windows package
+        shell: pwsh
+        run: ./scripts/build-windows.ps1
+      - name: Verify Windows package
+        shell: pwsh
+        run: |
+          $zip = "dist/PrismArt-$env:VERSION-Windows-x64.zip"
+          $expected = (Get-Content "$zip.sha256" -Raw).Split(' ')[0].Trim().ToLowerInvariant()
+          $actual = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($expected -ne $actual) { throw 'Windows ZIP checksum mismatch.' }
+          if (-not (Test-Path 'dist/windows/PrismArt.exe')) { throw 'PrismArt.exe missing.' }
+          if (-not (Test-Path 'dist/windows/primitive.exe')) { throw 'primitive.exe missing.' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrismArt-${{ needs.release.outputs.version }}-Windows-x64
+          path: |
+            dist/PrismArt-${{ needs.release.outputs.version }}-Windows-x64.zip
+            dist/PrismArt-${{ needs.release.outputs.version }}-Windows-x64.zip.sha256
+      - name: Add Windows assets to GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload $env:TAG "dist/PrismArt-$env:VERSION-Windows-x64.zip" "dist/PrismArt-$env:VERSION-Windows-x64.zip.sha256" --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Could not upload Windows release assets.' }

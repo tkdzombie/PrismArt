@@ -1,8 +1,8 @@
 # PrismArt
 
-**Turn photos into geometric artwork — locally on your Mac.**
+**Turn photos into geometric artwork — locally on macOS and Windows.**
 
-PrismArt is a native macOS front-end for [fogleman/primitive](https://github.com/fogleman/primitive).
+PrismArt is a native desktop front-end for [fogleman/primitive](https://github.com/fogleman/primitive).
 It is designed to feel like a small Mac app rather than a command-line wrapper: drag in an image,
 explore styles with a quick preview, then export a full-quality result.
 
@@ -19,6 +19,14 @@ explore styles with a quick preview, then export a full-quality result.
 - No Homebrew, Go, Git, Python or ImageMagick required by end users.
 - No cloud processing and no image uploads.
 - No app database, login item, launch agent or PATH modification.
+
+## Windows
+
+Download `PrismArt-<version>-Windows-x64.zip` from the same GitHub Release, extract the
+entire archive, and run `PrismArt.exe`. The ZIP includes the self-contained .NET runtime
+and `primitive.exe`; no Go, .NET, or developer tools are required. Keep both files in the
+same folder. Windows builds support PNG, JPEG, BMP, GIF, TIFF, and SVG export; HEIC and
+animated GIF export are currently macOS-only.
 
 ## Install from GitHub Releases
 
@@ -169,7 +177,7 @@ You can build PrismArt entirely on GitHub without installing Xcode, Go, Homebrew
 
 1. Create a GitHub repository and upload the contents of this project to the repository root, including the hidden `.github` directory.
 2. Open **Actions → CI**. The first push automatically runs tests and produces an ad-hoc signed DMG as a workflow artifact.
-3. For a permanent release, open **Actions → Release DMG → Run workflow**, enter a version such as `1.0.0`, and run it.
-4. When the workflow is green, download the DMG from **Releases** (or from the workflow's **Artifacts** section).
+3. For a permanent release, open **Actions → Release macOS + Windows → Run workflow**, enter a version such as `1.0.0`, and run it.
+4. When the workflow is green, download the DMG or Windows ZIP from **Releases** (or from the workflow's **Artifacts** section).
 
-The workflow uses a GitHub-hosted macOS runner, builds both arm64 and x86_64 binaries, creates a Universal app, applies an ad-hoc signature, verifies the DMG, and publishes a SHA-256 checksum.
+The workflow uses GitHub-hosted macOS and Windows runners, builds both macOS and Windows packages, verifies their SHA-256 checksums, and publishes both assets.

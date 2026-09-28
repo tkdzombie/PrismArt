@@ -4,3 +4,7 @@ dist/
 .swiftpm/
 *.xcuserstate
 certificate.p12
+Windows/PrismArt.Windows/bin/
+Windows/PrismArt.Windows/obj/
+PrismArt-OneClick-GitHub-fixed/.gh-config/
+PrismArt-OneClick-GitHub-fixed/output/

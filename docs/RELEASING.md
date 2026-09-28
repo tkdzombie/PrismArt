@@ -11,11 +11,13 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-`.github/workflows/release.yml` runs on a GitHub-hosted macOS runner and publishes:
+`.github/workflows/release.yml` runs on GitHub-hosted macOS and Windows runners and publishes:
 
 ```text
 PrismArt-1.0.0.dmg
 PrismArt-1.0.0.dmg.sha256
+PrismArt-1.0.0-Windows-x64.zip
+PrismArt-1.0.0-Windows-x64.zip.sha256
 ```
 
 The app and bundled Primitive engine are Universal (`arm64` + `x86_64`) and the app is
@@ -50,3 +52,6 @@ scripts/notarize.sh dist/PrismArt-1.0.0.dmg
 ```
 
 Do not describe ad-hoc releases as notarized or Apple-verified.
+
+The Windows ZIP is self-contained and includes `PrismArt.exe` and `primitive.exe`.
+Windows users extract the complete archive and launch `PrismArt.exe`.
