@@ -36,7 +36,12 @@ jobs:
           lipo -info "dist/PrismArt.app/Contents/MacOS/PrismArt"
           lipo -info "dist/PrismArt.app/Contents/Resources/bin/primitive"
           codesign --verify --deep --strict --verbose=2 "dist/PrismArt.app"
-          shasum -a 256 -c dist/PrismArt-0.0.0-ci.dmg.sha256
+          # The checksum file contains the DMG basename, so verify it from
+          # the directory that contains both artifacts.
+          (
+            cd dist
+            shasum -a 256 -c PrismArt-0.0.0-ci.dmg.sha256
+          )
       - uses: actions/upload-artifact@v4
         with:
           name: PrismArt-macOS-ad-hoc

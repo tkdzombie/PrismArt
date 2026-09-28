@@ -61,7 +61,12 @@ jobs:
           VERSION: ${{ steps.release.outputs.version }}
         run: |
           codesign --verify --deep --strict --verbose=2 "dist/PrismArt.app"
-          shasum -a 256 -c "dist/PrismArt-$VERSION.dmg.sha256"
+          # The checksum file contains the DMG basename, so verify it from
+          # the directory that contains both artifacts.
+          (
+            cd dist
+            shasum -a 256 -c "PrismArt-$VERSION.dmg.sha256"
+          )
           hdiutil verify "dist/PrismArt-$VERSION.dmg"
           lipo -info "dist/PrismArt.app/Contents/MacOS/PrismArt"
           lipo -info "dist/PrismArt.app/Contents/Resources/bin/primitive"
